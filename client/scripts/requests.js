@@ -1,4 +1,5 @@
-const SERVER_URL = '/api';
+import { delay } from './utils.js';
+import { singleRequest } from './singleRequest.js';
 
 export async function sendingRequests(concurrencyLimit) {
   const requestsQuantity = 1000;
@@ -25,19 +26,4 @@ export async function sendingRequests(concurrencyLimit) {
   // console.log('no Limit or residual requests');
   await Promise.all(requests);
   requests = [];
-}
-
-async function singleRequest(index) {
-  try {
-    const response = await fetch(SERVER_URL + `?index=${index}`);
-    const data = await response.json();
-    console.log('Data:', data);
-  } catch (error) {
-    console.error('Request error:', error);
-  }
-}
-
-function delay(seconds) {
-  const ms = seconds * 1000;
-  return new Promise((resolve) => setTimeout(resolve, ms));
 }
