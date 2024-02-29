@@ -10,7 +10,6 @@ export async function sendingRequests(concurrencyLimit) {
   for (let i = 1; i <= requestsQuantity; i++) {
     requests.push(singleRequest(requestIndex));
     if (concurrencyLimit >= 1 && requests.length === concurrencyLimit) {
-      // console.log('limit', concurrencyLimit);
       await Promise.all(requests);
       requests = [];
       await delay(secondsForNextRequest);
@@ -18,12 +17,8 @@ export async function sendingRequests(concurrencyLimit) {
     }
   }
 
-  if (!requests.length) {
-    // console.log('no residual requests');
-    return;
-  }
+  if (!requests.length) return;
 
-  // console.log('no Limit or residual requests');
   await Promise.all(requests);
   requests = [];
 }
