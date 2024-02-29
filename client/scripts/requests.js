@@ -2,6 +2,7 @@ const SERVER_URL = '/api';
 
 export async function sendingRequests(concurrencyLimit) {
   const requestsQuantity = 1000;
+  const secondsForNextRequest = 1;
   let requests = [];
 
   for (let i = 1; i <= requestsQuantity; i++) {
@@ -10,6 +11,7 @@ export async function sendingRequests(concurrencyLimit) {
       // console.log('limit', concurrencyLimit);
       await Promise.all(requests);
       requests = [];
+      await delay(secondsForNextRequest);
     }
   }
 
@@ -31,4 +33,9 @@ async function singleRequest() {
   } catch (error) {
     console.error('Request error:', error);
   }
+}
+
+function delay(seconds) {
+  const ms = seconds * 1000;
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
