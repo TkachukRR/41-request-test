@@ -4,14 +4,16 @@ export async function sendingRequests(concurrencyLimit) {
   const requestsQuantity = 1000;
   const secondsForNextRequest = 1;
   let requests = [];
+  let requestIndex = 1;
 
   for (let i = 1; i <= requestsQuantity; i++) {
-    requests.push(singleRequest());
+    requests.push(singleRequest(requestIndex));
     if (concurrencyLimit >= 1 && requests.length === concurrencyLimit) {
       // console.log('limit', concurrencyLimit);
       await Promise.all(requests);
       requests = [];
       await delay(secondsForNextRequest);
+      requestIndex++;
     }
   }
 
@@ -25,9 +27,9 @@ export async function sendingRequests(concurrencyLimit) {
   requests = [];
 }
 
-async function singleRequest() {
+async function singleRequest(index) {
   try {
-    const response = await fetch(SERVER_URL);
+    const response = await fetch(SERVER_URL + `?index=${index}`);
     const data = await response.json();
     console.log('Data:', data);
   } catch (error) {
